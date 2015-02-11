@@ -29,12 +29,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class DetailActivity extends ActionBarActivity implements
-NavigationDrawerFragment.NavigationDrawerCallbacks {
-
-
-    private NavigationDrawerFragment mNavigationDrawerFragment_1;
-
+public class DetailActivity extends MainActivity {  
+  
     ImageView pic;  
   
     int position;  
@@ -44,28 +40,17 @@ NavigationDrawerFragment.NavigationDrawerCallbacks {
     Actor actor;  
     
     private CharSequence mTitle;
-    
-    private Fragment currentFragment_1;
-	private Fragment lastFragment_1;
-	Context context;
-	
+  
     @Override  
     protected void onCreate(Bundle savedInstanceState) {  
-        super.onCreate(savedInstanceState);  
+    	super.onCreate(savedInstanceState);
         // set Explode enter transition animation for current activity  
         //getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);  
         //getWindow().setEnterTransition(new Explode().setDuration(1000));  
         //getWindow().setExitTransition(null);  
+        
+        setContentView(R.layout.detail_layout); 
   
-        setContentView(R.layout.detail_layout);  
-        Log.e("___Dylan___",">>onCreate");
-        this.context = this;  
-		
-        mNavigationDrawerFragment_1 = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer_1);
-		mTitle = getTitle();
-		mNavigationDrawerFragment_1.setUp(R.id.navigation_drawer_1, (DrawerLayout) findViewById(R.id.detail_layout));
-		Log.e("___Dylan___",">>onCreate1");
-		
         position = getIntent().getIntExtra("pos", 0);  
         actor = ContentFragment.actors.get(position);  
         pic = (ImageView) findViewById(R.id.detail_pic);  
@@ -87,7 +72,7 @@ NavigationDrawerFragment.NavigationDrawerCallbacks {
         getActionBar().setTitle(ContentFragment.actors.get(position).name);  
         Log.e("___Dylan___",">>onCreate2");
       
-        /*
+        
         // floating action button  
         btn.setImageDrawable(getDrawable(android.R.drawable.ic_menu_gallery));  
         btn.setOnClickListener(new View.OnClickListener() {  
@@ -126,7 +111,7 @@ NavigationDrawerFragment.NavigationDrawerCallbacks {
                 });  
             }  
         });
-         */
+        
     }  
   
     /** 
@@ -172,77 +157,5 @@ NavigationDrawerFragment.NavigationDrawerCallbacks {
         pic.setImageDrawable(getDrawable(actor.getImageResourceId(this)));  
         finishAfterTransition();  
     }  
-    @Override
-	public void onNavigationDrawerItemSelected(String title) {
-		FragmentManager fragmentManager = getSupportFragmentManager();
-		FragmentTransaction ft = fragmentManager.beginTransaction();
-		currentFragment_1 = fragmentManager.findFragmentByTag(title);
-		if(currentFragment_1 == null) {
-			currentFragment_1 = ContentFragment_detail.newInstance(title);
-			ft.add(R.id.container_1, currentFragment_1, title);
-		}
-		if(lastFragment_1 != null) {
-			ft.hide(lastFragment_1);
-		}
-		if(currentFragment_1.isDetached()){
-			ft.attach(currentFragment_1);
-		}
-		ft.show(currentFragment_1);
-		lastFragment_1 = currentFragment_1;
-		ft.commit();
-		onSectionAttached(title);
-	}
-
-	public void onSectionAttached(String title) {
-		mTitle = title;
-	}
-
-	public void restoreActionBar() {
-		ActionBar actionBar = getSupportActionBar();
-		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-		actionBar.setDisplayShowTitleEnabled(true);
-		actionBar.setTitle(mTitle);
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		if (!mNavigationDrawerFragment_1.isDrawerOpen()) {
-			getMenuInflater().inflate(R.menu.main, menu);
-			restoreActionBar();
-			return true;
-		}
-		return super.onCreateOptionsMenu(menu);
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		
-		
-		
-		return super.onOptionsItemSelected(item);
-	}
-   public static class ContentFragment_detail extends Fragment {
-      
-      private static final String ARG_SECTION_TITLE = "section_title";
-      private View rootView;
-    
-      public static ContentFragment_detail newInstance(String title) {
-         ContentFragment_detail fragment = new ContentFragment_detail();
-         Bundle args = new Bundle();
-         args.putString(ARG_SECTION_TITLE, title);
-         fragment.setArguments(args);
-         return fragment;
-      }
-
-      public ContentFragment_detail() {
-      }
-
-      @Override
-      public View onCreateView(LayoutInflater inflater, ViewGroup container_1,
-            Bundle savedInstanceState) {
-			rootView = inflater.inflate(R.layout.detail_layout, container_1, false); 
-			
-         return rootView;
-      }
-   }
+  
 }  
